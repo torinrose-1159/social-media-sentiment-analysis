@@ -2,3 +2,6 @@
 /justWork.py
 /__pycache__
 /database/__pycache__/
+/parameters.json
+/scrapeOutputs
+/mainTest.py
