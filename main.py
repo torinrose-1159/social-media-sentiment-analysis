@@ -20,6 +20,7 @@ with sync_playwright() as playwright:
                     print(topics)
                     del output[:]
                     for posts in topics:
+                        # TODO: figure out output parsing
                         print(posts)
                         jsonFormatting = json.dumps(posts)
                         deleteFormatting = re.sub(r"\\u[0-9a-fA-F]{4}", "", jsonFormatting)
