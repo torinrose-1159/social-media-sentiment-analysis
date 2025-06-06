@@ -65,6 +65,8 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
         searchBox.fill(searchQuery)
         searchBox.press("Enter")
         page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(2000)
+        del postHolder[:]
         for skeets in range(2, postDepth+2):
             linkObject = {"headline": "", "link": ""}
             quoteSkeet = {"quotedUser": "", "quotedText": ""}
@@ -122,8 +124,7 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
                 page.evaluate("()=> window.scrollBy(0, 10000)")
                 page.wait_for_timeout(500)
 
-            postHolder.append(sendToDB)
+            jsonObject = sendToDB.__dict__
+            postHolder.append(jsonObject)
         allQueriesHolder[searchQuery] = postHolder
     return allQueriesHolder
-
-
