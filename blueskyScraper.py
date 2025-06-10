@@ -48,7 +48,6 @@ def DateParser(date: str):
 
 def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
     allQueriesHolder = {}
-    postHolder = list()
     chromium = playwright.chromium
     browser = chromium.launch(headless=False)
     page = browser.new_page()
@@ -62,11 +61,12 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
     page.wait_for_load_state("networkidle")
     searchBox = page.get_by_role("search")
     for searchQuery in searchQueries:
+        postHolder = list()
         searchBox.fill(searchQuery)
         searchBox.press("Enter")
         page.wait_for_load_state("networkidle")
-        page.wait_for_timeout(2000)
-        del postHolder[:]
+        page.wait_for_timeout(3000)
+        print(f"Searching for the first {postDepth} posts related to keyword: {searchQuery}")
         for skeets in range(2, postDepth+2):
             linkObject = {"headline": "", "link": ""}
             quoteSkeet = {"quotedUser": "", "quotedText": ""}
@@ -113,7 +113,7 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             reskeetsInt = CountConverter(reskeetsCount)
             likesCount = page.locator(likesPath).text_content()
             likesInt = CountConverter(likesCount)
-            sendToDB = SkeetData(timestampClean, usernameClean, handleClean, skeetTextClean, commentsInt, reskeetsInt, likesInt, sentimentScores["compound"])
+            sendToDB = SkeetData(timestampClean, usernameClean, handleClean, skeetTextClean, commentsInt, reskeetsInt, likesInt, sentimentScores["compound"], searchQuery)
             if (list(linkObject.values())[0]):
                 sendToDB.link_headline = linkObject["headline"]
                 sendToDB.link_url = linkObject["link"]
@@ -127,4 +127,7 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             jsonObject = sendToDB.__dict__
             postHolder.append(jsonObject)
         allQueriesHolder[searchQuery] = postHolder
+        page.locator("a[aria-label='Home'][role='link']").click()
+        page.wait_for_timeout(2000)
+
     return allQueriesHolder

@@ -13,7 +13,8 @@ class SkeetData:
             comments,
             reposts,
             likes,
-            sentiment
+            sentiment,
+            keyword
     ):
         self.post_date = post_date
         self.username = username
@@ -23,3 +24,4 @@ class SkeetData:
         self.reposts = reposts
         self.likes = likes
         self.sentiment = sentiment
+        self.keyword = keyword

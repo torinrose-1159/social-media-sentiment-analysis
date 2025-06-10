@@ -11,5 +11,6 @@ CREATE TABLE bluesky_post_data (
     link_url VARCHAR(1000) NULL,
     quoted_user VARCHAR(50) NULL,
     quoted_text VARCHAR(300) NULL,
+    keyword VARCHAR(255) NOT NULL,
     PRIMARY KEY (post_date, username)
 )

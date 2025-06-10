@@ -12,18 +12,8 @@ with open("parameters.json", "r") as file:
 with sync_playwright() as playwright:
     for platform in platforms:
         if platform == "bluesky":
-            blueskyOutput = blueskyScraper(playwright, ["police", "Elon"], 2)
+            blueskyOutput = blueskyScraper(playwright, keywords, 2)
             filePath = "scrapeOutputs/bluesky/"+str(int(time.time()))+".json"
             with open(filePath, "w") as file:
-                output = list()
-                for topics in list(blueskyOutput.values()):
-                    print(topics)
-                    del output[:]
-                    for posts in topics:
-                        # TODO: figure out output parsing
-                        print(posts)
-                        jsonFormatting = json.dumps(posts)
-                        deleteFormatting = re.sub(r"\\u[0-9a-fA-F]{4}", "", jsonFormatting)
-                        output.append(deleteFormatting)
-                    json.dump(output, file)
+                json.dump(blueskyOutput, file)
 
