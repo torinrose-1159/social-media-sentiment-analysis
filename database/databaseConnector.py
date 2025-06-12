@@ -2,11 +2,11 @@ import psycopg2
 from psycopg2 import sql
 from config import config
 
-def dbConnect(platform: str):
+def dbConnect(database: str):
     try:
         connection = None
-        params = config(platform)
-        print("Connecting to the postgreSQL database for %s..." %(platform))
+        params = config(database)
+        print("Connecting to the postgreSQL database for %s..." %(database))
         connection = psycopg2.connect(**params)
         print("Connection successful!")
         return connection
