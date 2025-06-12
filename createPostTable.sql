@@ -12,5 +12,5 @@ CREATE TABLE bluesky_post_data (
     quoted_user VARCHAR(50) NULL,
     quoted_text VARCHAR(300) NULL,
     keyword VARCHAR(255) NOT NULL,
-    PRIMARY KEY (post_date, username)
+    PRIMARY KEY (post_date, keyword)
 )
