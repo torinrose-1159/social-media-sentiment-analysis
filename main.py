@@ -15,7 +15,7 @@ with open("parameters.json", "r") as file:
 with sync_playwright() as playwright:
     for platform in platforms:
         if platform == "bluesky":
-            blueskyOutput = blueskyScraper(playwright, keywords, 100)
+            blueskyOutput = blueskyScraper(playwright, keywords, 500)
             filePath = "scrapeOutputs/bluesky/staging/"+str(int(time.time()))+".json"
             with open(filePath, "w") as file:
                 json.dump(blueskyOutput, file)
@@ -43,3 +43,5 @@ for platform in platformFolders:
 
 db.cursorDisconnect(cursor)
 db.dbDisconnect(connection)
+
+print("Successfully scraped 500 more posts from each platform for each keyword!")

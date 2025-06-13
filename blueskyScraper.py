@@ -4,6 +4,7 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
 import re
 from postClasses import SkeetData
+from config import config
 
 SKEET_FINDER_PATH = "html > body > div:nth-child(1) > div > div > div > div > div > main > div > div > div:nth-child(2) > div > div > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(2) > div > div > div:nth-child(2) > div > div:nth-child"
 SKEET_CONTENT_PATH = "div > div:nth-child(2) > div:nth-child(2)"
@@ -18,6 +19,8 @@ QUOTE_SKEET_TEXT_PATH = "div:nth-child(2) > div > div:nth-child(2) > div:nth-chi
 
 nltk.download("vader_lexicon")
 sia = SentimentIntensityAnalyzer()
+
+credentials = config("bluesky", "logins.ini")
 
 def FindDaylightSavings():
     currentYear = time.gmtime().tm_year
@@ -55,8 +58,8 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
     page.wait_for_load_state("networkidle")
     page.locator("button[aria-label='Sign in']").click()
     page.wait_for_load_state("networkidle")
-    page.get_by_placeholder("Username or email address").fill("torinrose1@gmail.com")
-    page.get_by_placeholder("Password").fill("T0r1nBlu3sky")
+    page.get_by_placeholder("Username or email address").fill(credentials["user"])
+    page.get_by_placeholder("Password").fill(credentials["password"])
     page.locator("button[aria-label='Next']").click()
     page.wait_for_load_state("networkidle")
     searchBox = page.get_by_role("search")
@@ -71,6 +74,7 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             linkObject = {"headline": "", "link": ""}
             quoteSkeet = {"quotedUser": "", "quotedText": ""}
             finderPath = SKEET_FINDER_PATH + "(" + str(skeets) + ")"
+            page.locator(finderPath).scroll_into_view_if_needed()
             contentPath = finderPath + " > " + SKEET_CONTENT_PATH
             handlePath = contentPath + " > " + SKEET_USER_HANDLE_PATH
             handleText = page.locator(handlePath).text_content()
@@ -120,9 +124,6 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             if (list(quoteSkeet.values())[0]):
                 sendToDB.quoted_user = quoteSkeet["quotedUser"]
                 sendToDB.quoted_text = quoteSkeet["quotedText"]
-            if (skeets%20 == 0):
-                page.evaluate("()=> window.scrollBy(0, 10000)")
-                page.wait_for_timeout(500)
 
             jsonObject = sendToDB.__dict__
             postHolder.append(jsonObject)

@@ -5,7 +5,7 @@ from config import config
 def dbConnect(database: str):
     try:
         connection = None
-        params = config(database)
+        params = config(database, "database.ini")
         print("Connecting to the postgreSQL database for %s..." %(database))
         connection = psycopg2.connect(**params)
         print("Connection successful!")
@@ -55,5 +55,7 @@ def insertRecord(cursor, platform, data):
                             )
             cursor.execute(query, list(data.values()))
             cursor.connection.commit()
+            print("Record insertion successful!")
     except(Exception) as error:
         print(error)
+        cursor.connection.rollback()
