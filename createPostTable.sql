@@ -1,7 +1,7 @@
 CREATE TABLE bluesky_post_data (
     post_date TIMESTAMP NOT NULL,
     username VARCHAR(50) NOT NULL,
-    handle VARCHAR(50) NOT NULL,
+    handle VARCHAR(50) NULL,
     text_content VARCHAR(300) NOT NULL,
     comments INTEGER NULL,
     reposts INTEGER NULL,

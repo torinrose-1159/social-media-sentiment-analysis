@@ -81,7 +81,7 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             username = handleText.split("@")[0]
             usernameStepOne = re.sub(r"[\xa0]", "", username)
             usernameClean = re.sub(r"[\u202a-\u202e]", "", usernameStepOne)
-            handle = handleText.split("@")[1]
+            handle = handleText.split("@")[1] if len(handleText.split("@")) > 1 else None
             handleClean = "@" + re.sub(r"[\u202a-\u202e]", "", handle)
             timestampPath = contentPath + " > " + SKEET_TIMESTAMP_PATH
             timestamp = page.locator(timestampPath).get_attribute("aria-label")
