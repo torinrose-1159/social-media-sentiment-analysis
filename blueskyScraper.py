@@ -52,7 +52,7 @@ def DateParser(date: str):
 def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
     allQueriesHolder = {}
     chromium = playwright.chromium
-    browser = chromium.launch(headless=False)
+    browser = chromium.launch(headless=True)
     page = browser.new_page()
     page.goto("https://bsky.app/")
     page.wait_for_load_state("networkidle")
@@ -82,7 +82,8 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             usernameStepOne = re.sub(r"[\xa0]", "", username)
             usernameClean = re.sub(r"[\u202a-\u202e]", "", usernameStepOne)
             handle = handleText.split("@")[1] if len(handleText.split("@")) > 1 else None
-            handleClean = "@" + re.sub(r"[\u202a-\u202e]", "", handle)
+            if handle:
+                handleClean = "@" + re.sub(r"[\u202a-\u202e]", "", handle)
             timestampPath = contentPath + " > " + SKEET_TIMESTAMP_PATH
             timestamp = page.locator(timestampPath).get_attribute("aria-label")
             timestampClean = DateParser(timestamp)
