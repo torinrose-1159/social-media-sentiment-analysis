@@ -16,7 +16,7 @@ with sync_playwright() as playwright:
     for platform in platforms:
         if platform == "bluesky":
             blueskyOutput = blueskyScraper(playwright, keywords, 500)
-            filePath = "scrapeOutputs/bluesky/staging/"+str(int(time.time()))+".json"
+            filePath = f"scrapeOutputs/{platform}/staging/"+str(int(time.time()))+".json"
             with open(filePath, "w") as file:
                 json.dump(blueskyOutput, file)
 
