@@ -74,6 +74,7 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             linkObject = {"headline": "", "link": ""}
             quoteSkeet = {"quotedUser": "", "quotedText": ""}
             finderPath = SKEET_FINDER_PATH + "(" + str(skeets) + ")"
+            page.locator(finderPath).wait_for(state='visible')
             page.locator(finderPath).scroll_into_view_if_needed()
             contentPath = finderPath + " > " + SKEET_CONTENT_PATH
             handlePath = contentPath + " > " + SKEET_USER_HANDLE_PATH
