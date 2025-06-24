@@ -116,7 +116,6 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
             skeetTextRemoveLineBreak = re.sub(r"(\n+)", " ", skeetTextRemoveKeywordLowercase)
             skeetTextRemoveEmptySpace = re.sub("  ", " ", skeetTextRemoveLineBreak)
             skeetTextClean = skeetTextRemoveEmptySpace.strip()
-            print(skeetTextClean)
             sentimentScores = sia.polarity_scores(skeetText)
             commentsCount = page.locator(commentsPath).text_content()
             commentsInt = CountConverter(commentsCount)
