@@ -111,9 +111,8 @@ def blueskyScraper(playwright: Playwright, searchQueries, postDepth: int):
                     quoteSkeet["quotedText"] = page.locator(textPath + " > " + QUOTE_SKEET_TEXT_PATH).text_content()
                 textPath = textPath + " > div:nth-child(1)"
             skeetText = page.locator(textPath).text_content()
-            skeetTextRemoveKeywordUppercase = re.sub(searchQuery.capitalize(), "", skeetText)
-            skeetTextRemoveKeywordLowercase = re.sub(searchQuery.lower(), "", skeetTextRemoveKeywordUppercase)
-            skeetTextRemoveLineBreak = re.sub(r"(\n+)", " ", skeetTextRemoveKeywordLowercase)
+            skeetTextRemoveKeyword = re.sub(searchQuery.upper(), "", skeetText.upper()).lower()
+            skeetTextRemoveLineBreak = re.sub(r"(\n+)", " ", skeetTextRemoveKeyword)
             skeetTextRemoveEmptySpace = re.sub("  ", " ", skeetTextRemoveLineBreak)
             skeetTextClean = skeetTextRemoveEmptySpace.strip()
             sentimentScores = sia.polarity_scores(skeetText)
